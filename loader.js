@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         GoMining-MWT-Loader
-// @version      1.0.4
+// @version      1.0.5
 // @downloadURL  https://raw.githubusercontent.com/r4df0x/GoMining-MWT-Loader/main/loader.js
 // @updateURL    https://raw.githubusercontent.com/r4df0x/GoMining-MWT-Loader/main/loader.js
 // @match        https://app.gomining.com/*
@@ -52,39 +52,56 @@
     containers.forEach(container => {
       if (container.querySelector('.mw-autohide-control')) return;
 
+      if (getComputedStyle(container).position === 'static') {
+        container.style.position = 'relative';
+      }
+
       const wrap = document.createElement('div');
       wrap.className = 'mw-autohide-control';
       wrap.style.cssText = `
-        padding: 4px 6px;
-        font-size: 11px;
-        font-family: 'IBM Plex Mono', monospace;
-        opacity: 0.65;
+        position: absolute;
+        right: 22px;
+        bottom: 7px;
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 5px;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: .05em;
+        color: #4a6585;
+        text-transform: uppercase;
+        opacity: .75;
         background: transparent;
-        color: inherit;
         user-select: none;
+        z-index: 99999;
+        pointer-events: auto;
       `;
 
       const label = document.createElement('label');
       label.style.cssText = `
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 5px;
         cursor: pointer;
       `;
 
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.checked = autohideEnabled();
+      checkbox.style.cssText = `
+        width: 11px;
+        height: 11px;
+        accent-color: #f7931a;
+        cursor: pointer;
+      `;
 
       checkbox.addEventListener('change', () => {
         localStorage.setItem(STORAGE_KEY, checkbox.checked ? '1' : '0');
         updatePageState();
       });
 
-      label.append('Auto-Hide', checkbox);
+      label.append(checkbox, ' Auto-Hide');
       wrap.appendChild(label);
       container.appendChild(wrap);
     });
