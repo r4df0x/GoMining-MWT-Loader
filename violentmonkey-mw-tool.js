@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Load GoMining-Miner-Wars-Tool & Align Left
-// @version      1.0.2
-// @downloadURL  https://raw.githubusercontent.com/r4df0x/MW/main/violentmonkey-mw-tool.js
-// @updateURL    https://raw.githubusercontent.com/r4df0x/MW/main/violentmonkey-mw-tool.js
+// @name         GoMining-MWT-Loader
+// @version      1.0.3
+// @downloadURL  https://raw.githubusercontent.com/r4df0x/GoMining-MWT-Loader/main/violentmonkey-mw-tool.js
+// @updateURL    https://raw.githubusercontent.com/r4df0x/GoMining-MWT-Loader/main/violentmonkey-mw-tool.js
 // @match        https://app.gomining.com/*
 // @run-at       document-idle
 // @grant        none
@@ -37,29 +37,96 @@
 })();
 
 (function () {
-  function patchAlign(root = document) {
-    const els = root.querySelectorAll?.(
-      '.h-flex-full.align-items-center.justify-content-center.position-relative'
-    );
+  const targetSelector =
+    '.h-flex-full.align-items-center.justify-content-center.position-relative';
 
-    if (!els) return;
+  const STORAGE_KEY = 'mw_tool_autohide';
 
-    els.forEach(el => {
-      el.className =
-        'h-flex-full align-items-left ps-7 justify-content-center position-relative';
+  function autohideEnabled() {
+    return localStorage.getItem(STORAGE_KEY) === '1';
+  }
+
+  function addAutohideControl() {
+    const containers = document.querySelectorAll('.cn-page, #gm-clan-overlay');
+
+    containers.forEach(container => {
+      if (container.querySelector('.mw-autohide-control')) return;
+
+      const wrap = document.createElement('div');
+      wrap.className = 'mw-autohide-control';
+      wrap.style.cssText = `
+        padding: 4px 6px;
+        font-size: 11px;
+        font-family: 'IBM Plex Mono', monospace;
+        opacity: 0.65;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: transparent;
+        color: inherit;
+        user-select: none;
+      `;
+
+      const label = document.createElement('label');
+      label.style.cssText = `
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+      `;
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = autohideEnabled();
+
+      checkbox.addEventListener('change', () => {
+        localStorage.setItem(STORAGE_KEY, checkbox.checked ? '1' : '0');
+        updatePageState();
+      });
+
+      label.append('Auto-Hide', checkbox);
+      wrap.appendChild(label);
+      container.appendChild(wrap);
     });
   }
 
-  patchAlign();
+  function updatePageState(root = document) {
+    const els = root.querySelectorAll?.(targetSelector);
+
+    if (els) {
+      els.forEach(el => {
+        el.className =
+          'h-flex-full align-items-left ps-7 justify-content-center position-relative';
+      });
+    }
+
+    const targetExists = !!document.querySelector(
+      '.h-flex-full.align-items-left.justify-content-center.position-relative, ' +
+      targetSelector
+    );
+
+    addAutohideControl();
+
+    document.querySelectorAll('.cn-page, #gm-clan-overlay').forEach(el => {
+      el.style.display =
+        autohideEnabled() && !targetExists
+          ? 'none'
+          : '';
+    });
+  }
+
+  updatePageState();
 
   const observer = new MutationObserver(mutations => {
     for (const mutation of mutations) {
       for (const node of mutation.addedNodes) {
         if (node.nodeType === 1) {
-          patchAlign(node);
+          updatePageState(node);
         }
       }
     }
+
+    updatePageState();
   });
 
   observer.observe(document.body, {
