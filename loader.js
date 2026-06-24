@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         GoMining-MWT-Loader
-// @version      1.0.3
-// @downloadURL  https://raw.githubusercontent.com/r4df0x/GoMining-MWT-Loader/main/violentmonkey-mw-tool.js
-// @updateURL    https://raw.githubusercontent.com/r4df0x/GoMining-MWT-Loader/main/violentmonkey-mw-tool.js
+// @version      1.0.4
+// @downloadURL  https://raw.githubusercontent.com/r4df0x/GoMining-MWT-Loader/main/loader.js
+// @updateURL    https://raw.githubusercontent.com/r4df0x/GoMining-MWT-Loader/main/loader.js
 // @match        https://app.gomining.com/*
 // @run-at       document-idle
 // @grant        none
