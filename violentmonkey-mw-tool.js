@@ -1,5 +1,6 @@
 // ==UserScript==
 // @name         Load GoMining-Miner-Wars-Tool & Align Left
+// @version      1.0.1
 // @match        https://app.gomining.com/*
 // @run-at       document-idle
 // @grant        none
