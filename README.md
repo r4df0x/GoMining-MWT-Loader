@@ -16,7 +16,7 @@ Instead of installing and updating the original script manually, this loader alw
 
 4. Paste the following URL:
 
-   https://raw.githubusercontent.com/r4df0x/GoMining-MWT-Loader/main/loader.js
+   `https://raw.githubusercontent.com/r4df0x/GoMining-MWT-Loader/main/loader.js`
 
 5. Click **Install**.
 
