@@ -1,6 +1,8 @@
 // ==UserScript==
 // @name         Load GoMining-Miner-Wars-Tool & Align Left
 // @version      1.0.1
+// @downloadURL  https://raw.githubusercontent.com/r4df0x/MW/main/violentmonkey-mw-tool.js
+// @updateURL    https://raw.githubusercontent.com/r4df0x/MW/main/violentmonkey-mw-tool.js
 // @match        https://app.gomining.com/*
 // @run-at       document-idle
 // @grant        none
